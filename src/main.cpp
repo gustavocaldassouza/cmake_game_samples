@@ -5,16 +5,17 @@ const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 
 bool init();
+
 bool loadMedia();
+
 void close();
 
 SDL_Window *gWindow = NULL;
 SDL_Surface *gScreenSurface = NULL;
-SDL_Surface *gHelloWorld = NULL;
+SDL_Surface *gXOut = NULL;
 
 bool init() {
   bool success = true;
-
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
     success = false;
@@ -36,10 +37,10 @@ bool init() {
 bool loadMedia() {
   bool success = true;
 
-  gHelloWorld = SDL_LoadBMP("assets/hello_world.bmp");
-  if (gHelloWorld == NULL) {
+  gXOut = SDL_LoadBMP("assets/02.bmp");
+  if (gXOut == NULL) {
     printf("Unable to load image %s! SDL Error: %s\n",
-           "02_getting_an_image_on_the_screen/hello_world.bmp", SDL_GetError());
+           "03_event_driven_programming/x.bmp", SDL_GetError());
     success = false;
   }
 
@@ -47,8 +48,8 @@ bool loadMedia() {
 }
 
 void close() {
-  SDL_FreeSurface(gHelloWorld);
-  gHelloWorld = NULL;
+  SDL_FreeSurface(gXOut);
+  gXOut = NULL;
 
   SDL_DestroyWindow(gWindow);
   gWindow = NULL;
@@ -63,17 +64,19 @@ int main(int argc, char *args[]) {
     if (!loadMedia()) {
       printf("Failed to load media!\n");
     } else {
-      SDL_BlitSurface(gHelloWorld, NULL, gScreenSurface, NULL);
-
-      SDL_UpdateWindowSurface(gWindow);
+      bool quit = false;
 
       SDL_Event e;
-      bool quit = false;
-      while (quit == false) {
-        while (SDL_PollEvent(&e)) {
-          if (e.type == SDL_QUIT)
+
+      while (!quit) {
+        while (SDL_PollEvent(&e) != 0) {
+          if (e.type == SDL_QUIT) {
             quit = true;
+          }
         }
+
+        SDL_BlitSurface(gXOut, NULL, gScreenSurface, NULL);
+        SDL_UpdateWindowSurface(gWindow);
       }
     }
   }
