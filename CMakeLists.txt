@@ -4,6 +4,8 @@ project(SDL2Test)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
+
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 
